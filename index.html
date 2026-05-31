@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTB Bootcamp 2026 — Final Assessment</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f7fb;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);width:100%;max-width:680px;overflow:hidden}
+
+/* Start screen */
+#start-screen{display:flex;flex-direction:column;align-items:center;gap:1.5rem;padding:2.5rem 2rem;text-align:center}
+.logo{width:68px;height:68px;background:#2CB84B;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff}
+.start-title{font-size:22px;font-weight:600;color:#1a1a1a}
+.start-sub{font-size:14px;color:#666;line-height:1.7;max-width:380px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:380px}
+.info-card{background:#f4f7fb;border-radius:10px;padding:12px 16px;text-align:left}
+.info-card-label{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.info-card-val{font-size:15px;font-weight:600;color:#1a1a1a}
+.name-input{width:100%;max-width:380px;padding:11px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;color:#1a1a1a;outline:none;transition:border-color 0.2s}
+.name-input:focus{border-color:#2CB84B}
+.name-input.error{border-color:#DC2626}
+.start-btn{background:#2CB84B;color:#fff;border:none;padding:13px 36px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:380px;transition:background 0.2s}
+.start-btn:hover{background:#27a843}
+.disclaimer{font-size:12px;color:#aaa;max-width:380px;line-height:1.6}
+
+/* Quiz screen */
+#quiz-screen{display:none;flex-direction:column}
+.hdr{background:#2CB84B;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.hdr-title{color:#fff;font-weight:600;font-size:14px;letter-spacing:0.2px}
+.timer{background:rgba(0,0,0,0.18);color:#fff;font-size:15px;font-weight:600;padding:6px 16px;border-radius:20px;font-variant-numeric:tabular-nums;letter-spacing:1px;transition:background 0.3s}
+.timer.warn{background:#DC2626;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.75}}
+.progress-wrap{height:4px;background:#e8f5e9}
+.progress-bar{height:4px;background:#2CB84B;transition:width 0.4s ease}
+.q-body{padding:22px 24px 12px}
+.q-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.q-num{font-size:12px;color:#999}
+.section-badge{background:#e8f5e9;color:#2CB84B;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px}
+.q-text{font-size:16px;font-weight:500;color:#1a1a1a;line-height:1.55;margin-bottom:20px}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fff}
+.opt:hover{border-color:#2CB84B;background:#f6fef8}
+.opt.correct{border-color:#2CB84B;background:#f0fdf4}
+.opt.wrong{border-color:#DC2626;background:#fef2f2}
+.opt.show-correct{border-color:#2CB84B;background:#f0fdf4}
+.opt.disabled{cursor:default}
+.opt-key{width:30px;height:30px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#888;flex-shrink:0;transition:all 0.15s}
+.opt.correct .opt-key,.opt.show-correct .opt-key{background:#2CB84B;border-color:#2CB84B;color:#fff}
+.opt.wrong .opt-key{background:#DC2626;border-color:#DC2626;color:#fff}
+.opt-text{font-size:14px;color:#1a1a1a;line-height:1.45}
+.feedback{font-size:13px;margin:10px 0 4px;padding:10px 14px;border-radius:8px;display:none;font-weight:500}
+.feedback.show{display:block}
+.correct-fb{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.wrong-fb{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.q-footer{padding:14px 24px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f0f0}
+.q-counter{font-size:13px;color:#999}
+.next-btn{background:#2CB84B;color:#fff;border:none;padding:10px 26px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.next-btn:hover{background:#27a843}
+.next-btn:disabled{background:#e0e0e0;color:#aaa;cursor:default}
+
+/* Result screen */
+#result-screen{display:none;flex-direction:column;align-items:center;gap:1.2rem;padding:2.5rem 2rem;text-align:center}
+.score-ring{width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.score-ring.pass-ring{background:#2CB84B}
+.score-ring.fail-ring{background:#DC2626}
+.score-big{font-size:36px;font-weight:700;line-height:1}
+.score-of{font-size:14px;opacity:0.85;margin-top:2px}
+.result-name{font-size:20px;font-weight:600;color:#1a1a1a}
+.result-grade{font-size:14px;color:#666}
+.timed-out{background:#fef2f2;color:#991b1b;font-size:13px;font-weight:500;padding:8px 18px;border-radius:20px;border:1px solid #fecaca}
+.pass-banner{background:#f0fdf4;border:1.5px solid #2CB84B;border-radius:12px;padding:16px 20px;max-width:420px;color:#166534;font-size:14px;font-weight:500;line-height:1.6}
+.fail-banner{background:#fef2f2;border:1.5px solid #DC2626;border-radius:12px;padding:16px 20px;max-width:420px;color:#991b1b;font-size:14px;font-weight:500;line-height:1.6}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:420px}
+.stat{background:#f4f7fb;border-radius:10px;padding:14px 10px;text-align:center}
+.stat-val{font-size:22px;font-weight:700;color:#1a1a1a}
+.stat-lbl{font-size:11px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:0.4px}
+.pass-mark-note{font-size:12px;color:#aaa}
+.grade-msg{font-size:13px;color:#666;max-width:360px;line-height:1.65}
+.btb-footer{font-size:12px;color:#ccc;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="card">
+
+<!-- START -->
+<div id="start-screen">
+  <div class="logo">B</div>
+  <div class="start-title">BTB Bootcamp 2026</div>
+  <div class="start-sub">Final Assessment — 60 questions across all modules. You have 30 minutes. The exam auto-submits when time runs out.</div>
+  <input class="name-input" id="student-name" placeholder="Enter your full name" maxlength="60"/>
+  <div class="info-grid">
+    <div class="info-card"><div class="info-card-label">Questions</div><div class="info-card-val">60</div></div>
+    <div class="info-card"><div class="info-card-label">Time limit</div><div class="info-card-val">30 minutes</div></div>
+    <div class="info-card"><div class="info-card-label">Pass mark</div><div class="info-card-val">31 / 60</div></div>
+    <div class="info-card"><div class="info-card-label">Attempts</div><div class="info-card-val">1 only</div></div>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">Begin Assessment</button>
+  <div class="disclaimer">Once you start, the timer cannot be paused. Make sure you are in a quiet place before clicking Begin.</div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen">
+  <div class="hdr">
+    <span class="hdr-title">BTB Final Assessment</span>
+    <span class="timer" id="timer">30:00</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  <div class="q-body">
+    <div class="q-top">
+      <span class="q-num" id="q-num">Question 1 of 60</span>
+      <span class="section-badge" id="q-section">Excel</span>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+  <div class="q-footer">
+    <span class="q-counter" id="q-counter">1 / 60</span>
+    <button class="next-btn" id="next-btn" onclick="nextQ()" disabled>Next</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result-screen">
+  <div class="score-ring" id="score-ring">
+    <div class="score-big" id="score-big">0</div>
+    <div class="score-of">out of 60</div>
+  </div>
+  <div class="result-name" id="result-name"></div>
+  <div class="result-grade" id="result-grade"></div>
+  <div id="timed-out-wrap"></div>
+  <div id="banner"></div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="s-correct">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat"><div class="stat-val" id="s-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+    <div class="stat"><div class="stat-val" id="s-pct">0%</div><div class="stat-lbl">Score</div></div>
+  </div>
+  <div class="pass-mark-note">Pass mark: 31 out of 60 &nbsp;|&nbsp; 51%</div>
+  <div class="grade-msg" id="grade-msg"></div>
+  <div class="btb-footer">BTB Data Analysis Bootcamp 2026 &mdash; Cohort 1</div>
+</div>
+
+</div>
+
+<script>
+const Q=[
+  {s:"Excel",q:"You have sales data in column B (B2:B100). Which formula gives you the total sales?",o:["=COUNT(B2:B100)","=SUM(B2:B100)","=AVERAGE(B2:B100)","=MAX(B2:B100)"],a:1},
+  {s:"Excel",q:"After cleaning a dataset, you expect 45 rows. Which formula confirms the exact number of numeric entries in column F?",o:["=SUM(F2:F50)","=COUNTA(F2:F50)","=COUNT(F2:F50)","=ROWS(F2:F50)"],a:2},
+  {s:"Excel",q:"A cell shows #N/A after a VLOOKUP. What does this most likely mean?",o:["The formula syntax is wrong","The lookup value was not found in the table","The column index number is too large","The range is not sorted"],a:1},
+  {s:"Excel",q:"You want to count how many transactions in column C contain the word 'Lagos'. Which formula is correct?",o:["=COUNT(C2:C100,\"Lagos\")","=SUMIF(C2:C100,\"Lagos\")","=COUNTIF(C2:C100,\"Lagos\")","=COUNTA(C2:C100,\"Lagos\")"],a:2},
+  {s:"Excel",q:"What is the correct VLOOKUP formula to find the price of 'Rice' where Product is in column A and Price is in column C?",o:["=VLOOKUP(\"Rice\",A:C,2,FALSE)","=VLOOKUP(\"Rice\",A:C,3,FALSE)","=VLOOKUP(\"Rice\",A:C,3,TRUE)","=VLOOKUP(A2,A:C,1,FALSE)"],a:1},
+  {s:"Excel",q:"You have a Pivot Table showing total revenue by branch. You add a slicer for 'Category'. What does the slicer do?",o:["Adds a new column to the pivot table","Filters the pivot table results interactively","Sorts the pivot table alphabetically","Changes the chart type"],a:1},
+  {s:"Excel",q:"Which of the following best describes the purpose of a Pivot Table?",o:["It stores raw data in a structured format","It summarises and aggregates data without changing the source","It creates formulas automatically for each row","It removes duplicate values from a dataset"],a:1},
+  {s:"Excel",q:"A column meant to hold revenue figures shows values left-aligned in the cells. What does this indicate?",o:["The column has been formatted as currency","The numbers are correct but unsorted","The values are stored as text, not numbers","The column has conditional formatting applied"],a:2},
+  {s:"Excel",q:"You want to calculate total revenue ONLY for the 'Lagos' branch. Which formula works?",o:["=COUNTIF(B2:B100,\"Lagos\",C2:C100)","=SUMIF(B2:B100,\"Lagos\",C2:C100)","=SUM(B2:B100,\"Lagos\")","=SUMIFS(C2:C100,\"Lagos\")"],a:1},
+  {s:"Excel",q:"What is the main difference between COUNT and COUNTA?",o:["COUNT adds values; COUNTA counts rows","COUNT only counts numeric cells; COUNTA counts all non-empty cells","COUNT works on text; COUNTA works on numbers","There is no difference between them"],a:1},
+  {s:"Excel",q:"Which chart type is most appropriate for showing how monthly revenue changes over a 12-month period?",o:["Pie chart","Bar chart","Line chart","Scatter chart"],a:2},
+  {s:"Excel",q:"What does the MIN function return when applied to a range of revenue values?",o:["The average revenue across the range","The most frequently occurring revenue value","The smallest revenue value in the range","The first value in the range"],a:2},
+  {s:"Excel",q:"A dataset has 50 rows but one row is an exact duplicate. After removing duplicates, how many rows remain?",o:["50","49","48","It depends on which row is the duplicate"],a:1},
+  {s:"Excel",q:"You want to lock the reference to cell B1 so it doesn't change when you drag a formula down. Which is correct?",o:["B1","$B1","B$1","$B$1"],a:3},
+  {s:"Excel",q:"What does conditional formatting do in Excel?",o:["It changes the formula in a cell based on its value","It applies visual formatting to cells based on rules you define","It filters rows that meet a certain condition","It calculates values only when a condition is true"],a:1},
+  {s:"SQL",q:"Which SQL clause is used to filter rows based on a condition?",o:["ORDER BY","GROUP BY","WHERE","HAVING"],a:2},
+  {s:"SQL",q:"What does SELECT COUNT(*) FROM orders WHERE status = 'Completed' return?",o:["The total revenue of completed orders","The number of completed orders","A list of all completed orders","The number of columns in the orders table"],a:1},
+  {s:"SQL",q:"What is the difference between WHERE and HAVING in SQL?",o:["WHERE filters individual rows; HAVING filters grouped results","WHERE is for text columns; HAVING is for numeric columns","They are interchangeable","HAVING runs before WHERE in execution order"],a:0},
+  {s:"SQL",q:"What does SELECT DISTINCT city FROM customers return?",o:["The number of cities in the table","All rows where city is not null","Each city name listed only once","Cities sorted alphabetically"],a:2},
+  {s:"SQL",q:"A table called trips has 10,000 rows. What does SELECT * FROM trips LIMIT 10 return?",o:["The 10 most recent trips","The 10 highest-value trips","The first 10 rows as stored in the table","A random sample of 10 trips"],a:2},
+  {s:"SQL",q:"Which JOIN type returns only rows that have matching values in BOTH tables?",o:["LEFT JOIN","RIGHT JOIN","FULL OUTER JOIN","INNER JOIN"],a:3},
+  {s:"SQL",q:"You want to find all customers who have NEVER placed an order. Which approach is correct?",o:["INNER JOIN customers and orders, filter where order_id IS NULL","LEFT JOIN customers to orders, filter where order_id IS NULL","RIGHT JOIN orders to customers, filter where customer_id IS NULL","Use WHERE customer_id NOT IN customers"],a:1},
+  {s:"SQL",q:"What does ORDER BY revenue DESC do?",o:["Sorts results from lowest to highest revenue","Removes duplicate revenue values","Sorts results from highest to lowest revenue","Filters out null revenue values"],a:2},
+  {s:"SQL",q:"Which correctly counts completed trips per driver?",o:["SELECT driver_id, COUNT(*) FROM trips GROUP BY driver_id WHERE status='Completed'","SELECT driver_id FROM trips WHERE status='Completed' GROUP BY driver_id","SELECT driver_id, COUNT(*) FROM trips WHERE status='Completed' GROUP BY driver_id","SELECT COUNT(*), driver_id FROM trips HAVING status='Completed'"],a:2},
+  {s:"SQL",q:"A table has 500 rows where 200 have null in the rating column. What does SELECT COUNT(rating) FROM trips return?",o:["500","200","300","0"],a:2},
+  {s:"SQL",q:"Which SQL keyword combines rows from two queries that have the same columns?",o:["JOIN","MERGE","UNION","APPEND"],a:2},
+  {s:"SQL",q:"What does SELECT city, AVG(fare) FROM trips GROUP BY city ORDER BY AVG(fare) DESC return?",o:["The city with the highest single fare","The average fare per city sorted from highest to lowest","All fares grouped by city in ascending order","The total fare per city"],a:1},
+  {s:"SQL",q:"What does the LIKE operator do in SQL?",o:["Checks if a value equals another value exactly","Joins two tables on a matching column","Filters rows based on a pattern match","Returns results in alphabetical order"],a:2},
+  {s:"SQL",q:"A query uses HAVING COUNT(*) > 10. What does this filter?",o:["Rows where the count column is greater than 10","Individual rows that appear more than 10 times","Groups that contain more than 10 rows","The top 10 groups by count"],a:2},
+  {s:"SQL",q:"What does the AS keyword do in SQL?",o:["It creates a new table","It renames a column or table temporarily in the query output","It joins two tables together","It filters rows based on a condition"],a:1},
+  {s:"Power BI",q:"What is the difference between a Measure and a Calculated Column in Power BI?",o:["Measures are stored in the table; Calculated Columns are computed on demand","Measures are computed on demand in filter context; Calculated Columns are computed row by row at load time","They are the same thing with different names","Calculated Columns use DAX; Measures use M code"],a:1},
+  {s:"Power BI",q:"You create Total Revenue = SUM(fact_Trips[Net_Fare_NGN]) and place it on a card filtered by Lagos. What does the card show?",o:["Total revenue across all cities","Total revenue for Lagos only, because the visual filter changes the context","An error because CALCULATE is required for filters","The maximum fare in Lagos"],a:1},
+  {s:"Power BI",q:"What does DIVIDE([Total Revenue],[Total Trips]) do compared to [Total Revenue]/[Total Trips]?",o:["They are identical in all cases","DIVIDE handles blank or zero denominators gracefully and prevents errors","DIVIDE is slower but more accurate","The slash operator handles blank denominators automatically"],a:1},
+  {s:"Power BI",q:"In Power Query, what is the difference between Remove Duplicates and Remove Errors?",o:["They do the same thing","Remove Duplicates deletes repeated rows; Remove Errors deletes rows with data errors","Remove Duplicates works on columns; Remove Errors works on rows","Remove Errors only works on numeric columns"],a:1},
+  {s:"Power BI",q:"What does CALCULATE(SUM(fact_Trips[Revenue]), fact_Trips[City]=\"Lagos\") do?",o:["Returns total revenue only where City equals Lagos","Counts all trips from Lagos","Returns Lagos revenue divided by total revenue","Filters the dim_Location table by Lagos"],a:0},
+  {s:"Power BI",q:"You have a slicer on page 1 but it doesn't filter visuals on page 2. What is the most likely reason?",o:["The slicer visual type is wrong","The slicer is not synced across pages","The relationship between tables is inactive","DAX measures cannot respond to slicers on other pages"],a:1},
+  {s:"Power BI",q:"What is the purpose of marking a table as a Date Table in Power BI?",o:["It formats the date column to show month names","It enables Power BI to use the table for time intelligence functions correctly","It automatically creates year, month and quarter columns","It links the date table to all other tables automatically"],a:1},
+  {s:"Power BI",q:"What does filter context mean in DAX?",o:["The M code context in Power Query","The set of filters applied to a measure at the time it evaluates","The relationship direction between tables","The row currently being calculated in a calculated column"],a:1},
+  {s:"Power BI",q:"Which correctly counts distinct customers who completed at least one trip?",o:["COUNT(fact_Trips[Customer_ID])","COUNTROWS(fact_Trips)","CALCULATE(DISTINCTCOUNT(fact_Trips[Customer_ID]), fact_Trips[Status]=\"Completed\")","DISTINCTCOUNT(dim_Customer[Customer_ID])"],a:2},
+  {s:"Power BI",q:"In a star schema, what type of data should the fact table ideally contain?",o:["Descriptive attributes like customer names and product descriptions","Measures, foreign keys and transaction-level records","Only date and time columns","Aggregated totals pre-calculated for each dimension"],a:1},
+  {s:"Power BI",q:"A student sets cross-filter direction to Both on a relationship. What is the main risk?",o:["The relationship becomes inactive","Measures will return blank values","Double-counting can occur in aggregations","The model will refuse to load"],a:2},
+  {s:"Power BI",q:"What is the correct way to apply a professional colour theme to all visuals at once in Power BI?",o:["Format each visual individually in the Format pane","Import a JSON theme file via View -> Themes","Use a calculated column to assign colours","Change the report background colour"],a:1},
+  {s:"Power BI",q:"What is the difference between Import mode and DirectQuery in Power BI?",o:["Import mode is faster because data is loaded into the model; DirectQuery queries the source live","DirectQuery stores a copy of the data; Import mode does not","Import mode only works with Excel; DirectQuery works with databases","They produce identical results and performance"],a:0},
+  {s:"Power BI",q:"A student's measure returns BLANK on some visuals. Why does this happen?",o:["The measure has a syntax error","The data source is unavailable","DAX returns BLANK when there is no data for that filter combination — it is expected behaviour","BLANK means the measure needs to be recalculated"],a:2},
+  {s:"Power BI",q:"What is the purpose of creating a dedicated Measures table in Power BI?",o:["To store raw data separately from the fact table","To keep all DAX measures organised in one place instead of scattered across multiple tables","To create a backup of the data model","Measures tables are required by Power BI to load the report"],a:1},
+  {s:"Analytics",q:"What is the difference between structured and unstructured data?",o:["Structured data is large; unstructured data is small","Structured data is organised in rows and columns; unstructured data has no predefined format","Structured data is stored in the cloud; unstructured data is stored locally","Structured data requires Python; unstructured data requires Excel"],a:1},
+  {s:"Analytics",q:"A dataset shows that ice cream sales increase as drowning incidents increase. What is the correct interpretation?",o:["Ice cream causes drowning","Drowning causes people to buy ice cream","There is a correlation, likely explained by a third variable such as hot weather","The data is incorrect and should be cleaned"],a:2},
+  {s:"Analytics",q:"Which of these best describes a KPI?",o:["A type of chart used to compare categories","A raw column in a dataset","A measurable value that indicates how well a business objective is being met","A formula that calculates running totals"],a:2},
+  {s:"Analytics",q:"A data analyst receives a brief asking 'Why did sales drop in Q3?' What type of analysis is being requested?",o:["Descriptive","Diagnostic","Predictive","Prescriptive"],a:1},
+  {s:"Analytics",q:"What does a data dictionary contain?",o:["A list of all DAX formulas in a report","The definitions, data types and descriptions of all columns in a dataset","A glossary of Excel keyboard shortcuts","A record of who accessed the data and when"],a:1},
+  {s:"Analytics",q:"Which of the following is an example of a quantitative variable?",o:["Customer name","Product category","City of delivery","Revenue per transaction"],a:3},
+  {s:"Analytics",q:"A dashboard shows average delivery time is 38 minutes. A stakeholder asks if this is good or bad. What should the analyst do?",o:["Say it is good because it is under an hour","Provide context — compare against a target, benchmark or historical trend","Rebuild the dashboard to show individual delivery times","Remove the metric because it is subjective"],a:1},
+  {s:"Analytics",q:"What is the key difference between a dashboard and a report in business intelligence?",o:["A dashboard has more pages than a report","A report shows raw data; a dashboard shows processed data","A dashboard provides a high-level summary of key metrics; a report provides detailed drill-down analysis","They are the same thing"],a:2},
+  {s:"Analytics",q:"An analyst presents a pie chart with 14 segments. What is the main problem?",o:["Pie charts cannot show more than 5 segments in any BI tool","Too many segments make it impossible to compare proportions accurately","Pie charts should only be used for time-series data","There is no problem"],a:1},
+  {s:"Analytics",q:"What does ETL stand for?",o:["Export, Transform, Load","Extract, Transform, Load — pulling data from a source, cleaning it, and loading it into a destination","Evaluate, Test, Launch","Extract, Table, Link"],a:1},
+  {s:"Analytics",q:"A stakeholder says 'our data shows 95% customer satisfaction.' As an analyst, what is the most important follow-up question?",o:["What chart type was used to show this?","How was customer satisfaction defined and measured?","Is the data stored in Excel or a database?","How many customers are in the dataset?"],a:1},
+  {s:"Analytics",q:"What does data granularity refer to?",o:["The number of charts in a report","How messy or clean a dataset is","The level of detail captured in each row of a dataset","The number of tables in a data model"],a:2},
+  {s:"Analytics",q:"Why is it important to understand your audience before building a dashboard?",o:["Different audiences use different tools","The right level of detail and the right metrics depend on what decisions that audience needs to make","Some audiences cannot read charts","Audience size determines how many visuals you need"],a:1},
+  {s:"Python",q:"In pandas, what does df.shape return?",o:["The column names of the DataFrame","The data types of each column","A tuple showing the number of rows and columns in the DataFrame","The first 5 rows of the DataFrame"],a:2},
+  {s:"Python",q:"A student runs df.isnull().sum() and sees 47 next to the column 'Revenue'. What does this mean?",o:["There are 47 rows where Revenue is zero","The Revenue column has 47 missing values","47 rows have been removed from the DataFrame","The Revenue column contains 47 unique values"],a:1},
+  {s:"Python",q:"What is the difference between df.drop_duplicates() and df.dropna()?",o:["drop_duplicates removes empty rows; dropna removes repeated rows","They both remove null values but from different axes","drop_duplicates removes repeated rows; dropna removes rows with missing values","They are the same function with different names"],a:2}
+];
+
+const PASS=31;
+let cur=0,score=0,answered=false,interval=null,left=1800,timedOut=false,name="";
+
+function startQuiz(){
+  const n=document.getElementById("student-name").value.trim();
+  if(!n){document.getElementById("student-name").classList.add("error");return;}
+  name=n;
+  document.getElementById("start-screen").style.display="none";
+  const qs=document.getElementById("quiz-screen");
+  qs.style.display="flex";qs.style.flexDirection="column";
+  interval=setInterval(tick,1000);
+  render();
+}
+
+function tick(){
+  left--;
+  const m=Math.floor(left/60),s=left%60;
+  const el=document.getElementById("timer");
+  el.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  if(left<=300)el.classList.add("warn");
+  if(left<=0){clearInterval(interval);timedOut=true;finish();}
+}
+
+function render(){
+  const q=Q[cur];
+  document.getElementById("q-num").textContent="Question "+(cur+1)+" of 60";
+  document.getElementById("q-section").textContent=q.s;
+  document.getElementById("q-text").textContent=q.q;
+  document.getElementById("q-counter").textContent=(cur+1)+" / 60";
+  document.getElementById("progress-bar").style.width=((cur/60)*100)+"%";
+  const opts=document.getElementById("options");
+  opts.innerHTML="";
+  ["A","B","C","D"].forEach((k,i)=>{
+    const d=document.createElement("div");
+    d.className="opt";d.dataset.i=i;
+    d.innerHTML=`<div class="opt-key">${k}</div><div class="opt-text">${q.o[i]}</div>`;
+    d.onclick=()=>pick(i);
+    opts.appendChild(d);
+  });
+  const fb=document.getElementById("feedback");
+  fb.className="feedback";fb.textContent="";
+  const nb=document.getElementById("next-btn");
+  nb.disabled=true;nb.textContent=cur===59?"Submit":"Next";
+  answered=false;
+}
+
+function pick(i){
+  if(answered)return;
+  answered=true;
+  const q=Q[cur];
+  const opts=document.querySelectorAll(".opt");
+  opts.forEach(o=>o.classList.add("disabled"));
+  opts[i].classList.add(i===q.a?"correct":"wrong");
+  if(i===q.a)score++;
+  else opts[q.a].classList.add("show-correct");
+  const fb=document.getElementById("feedback");
+  fb.className="feedback show "+(i===q.a?"correct-fb":"wrong-fb");
+  fb.textContent=i===q.a?"Correct!":"Incorrect. The correct answer is "+["A","B","C","D"][q.a]+".";
+  document.getElementById("next-btn").disabled=false;
+}
+
+function nextQ(){
+  if(cur===59){finish();return;}
+  cur++;render();
+}
+
+function finish(){
+  clearInterval(interval);
+  document.getElementById("quiz-screen").style.display="none";
+  const rs=document.getElementById("result-screen");
+  rs.style.display="flex";rs.style.flexDirection="column";
+  const pct=Math.round((score/60)*100);
+  const passed=score>=PASS;
+  document.getElementById("score-big").textContent=score;
+  document.getElementById("result-name").textContent=name;
+  document.getElementById("s-correct").textContent=score;
+  document.getElementById("s-wrong").textContent=60-score;
+  document.getElementById("s-pct").textContent=pct+"%";
+  const ring=document.getElementById("score-ring");
+  ring.className="score-ring "+(passed?"pass-ring":"fail-ring");
+  if(timedOut){
+    document.getElementById("timed-out-wrap").innerHTML='<div class="timed-out">Time ran out — exam auto-submitted</div>';
+  }
+  const firstName=name.split(" ")[0];
+  document.getElementById("banner").innerHTML=passed
+    ?`<div class="pass-banner">Congratulations, ${firstName}! You passed the BTB Final Assessment with ${score}/60. Well done on completing the bootcamp — this is a real achievement.</div>`
+    :`<div class="fail-banner">You scored ${score}/60 and did not reach the pass mark of ${PASS} this time. Keep going — use your capstone project to reinforce the concepts and show what you've learned.</div>`;
+  let grade,msg;
+  if(pct>=80){grade="Distinction";msg="Outstanding result. You demonstrated a strong command of every module covered in the bootcamp.";}
+  else if(pct>=65){grade="Merit";msg="Great work. You have a solid grasp of the core concepts. Keep building on this foundation.";}
+  else if(pct>=52){grade="Pass";msg:"You passed. There are a few areas to revisit — your capstone project is a great opportunity to strengthen them.";}
+  else{grade="Did not pass";msg="The concepts are there — review the modules and apply them hands-on. You can get there.";}
+  document.getElementById("result-grade").textContent=grade+" · "+pct+"%";
+  document.getElementById("grade-msg").textContent=msg;
+}
+</script>
+</body>
+</html>
