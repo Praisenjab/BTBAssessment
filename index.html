@@ -6,83 +6,107 @@
 <title>BTB Bootcamp 2026 — Final Assessment</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f7fb;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F4F7FB;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
 .card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);width:100%;max-width:680px;overflow:hidden}
 
-/* Start screen */
+/* ── START ── */
 #start-screen{display:flex;flex-direction:column;align-items:center;gap:1.5rem;padding:2.5rem 2rem;text-align:center}
-.logo{width:68px;height:68px;background:#2CB84B;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff}
-.start-title{font-size:22px;font-weight:600;color:#1a1a1a}
-.start-sub{font-size:14px;color:#666;line-height:1.7;max-width:380px}
+.logo{width:68px;height:68px;background:#1A35BB;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff}
+.start-title{font-size:22px;font-weight:600;color:#111833}
+.start-sub{font-size:14px;color:#6B7280;line-height:1.7;max-width:380px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:380px}
-.info-card{background:#f4f7fb;border-radius:10px;padding:12px 16px;text-align:left}
-.info-card-label{font-size:11px;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.info-card-val{font-size:15px;font-weight:600;color:#1a1a1a}
-.name-input{width:100%;max-width:380px;padding:11px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;color:#1a1a1a;outline:none;transition:border-color 0.2s}
-.name-input:focus{border-color:#2CB84B}
-.name-input.error{border-color:#DC2626}
-.start-btn{background:#2CB84B;color:#fff;border:none;padding:13px 36px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:380px;transition:background 0.2s}
-.start-btn:hover{background:#27a843}
-.disclaimer{font-size:12px;color:#aaa;max-width:380px;line-height:1.6}
+.info-card{background:#F4F7FB;border-radius:10px;padding:12px 16px;text-align:left}
+.info-label{font-size:11px;color:#6B7280;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.info-val{font-size:15px;font-weight:600;color:#111833}
+.name-input{width:100%;max-width:380px;padding:11px 16px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:14px;color:#111833;outline:none;transition:border-color 0.2s}
+.name-input:focus{border-color:#1A35BB}
+.name-input.err{border-color:#DC2626}
+.start-btn{background:#1A35BB;color:#fff;border:none;padding:13px 36px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:380px;transition:background 0.2s}
+.start-btn:hover{background:#152da0}
+.disclaimer{font-size:12px;color:#9CA3AF;max-width:380px;line-height:1.6}
 
-/* Quiz screen */
+/* ── QUIZ ── */
 #quiz-screen{display:none;flex-direction:column}
-.hdr{background:#2CB84B;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.hdr-title{color:#fff;font-weight:600;font-size:14px;letter-spacing:0.2px}
-.timer{background:rgba(0,0,0,0.18);color:#fff;font-size:15px;font-weight:600;padding:6px 16px;border-radius:20px;font-variant-numeric:tabular-nums;letter-spacing:1px;transition:background 0.3s}
+.hdr{background:#111833;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.hdr-title{color:#fff;font-weight:600;font-size:14px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.timer{background:#1A35BB;color:#fff;font-size:15px;font-weight:600;padding:6px 16px;border-radius:20px;font-variant-numeric:tabular-nums;letter-spacing:1px;transition:background 0.3s}
 .timer.warn{background:#DC2626;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.75}}
-.progress-wrap{height:4px;background:#e8f5e9}
-.progress-bar{height:4px;background:#2CB84B;transition:width 0.4s ease}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+.progress-wrap{height:4px;background:#E5E7EB}
+.progress-bar{height:4px;background:#00B4D8;transition:width 0.4s ease}
 .q-body{padding:22px 24px 12px}
 .q-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.q-num{font-size:12px;color:#999}
-.section-badge{background:#e8f5e9;color:#2CB84B;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px}
-.q-text{font-size:16px;font-weight:500;color:#1a1a1a;line-height:1.55;margin-bottom:20px}
+.q-num{font-size:12px;color:#9CA3AF}
+.section-badge{background:#EFF6FF;color:#1A35BB;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px}
+.q-text{font-size:16px;font-weight:500;color:#111833;line-height:1.55;margin-bottom:20px}
 .options{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
-.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fff}
-.opt:hover{border-color:#2CB84B;background:#f6fef8}
-.opt.correct{border-color:#2CB84B;background:#f0fdf4}
-.opt.wrong{border-color:#DC2626;background:#fef2f2}
-.opt.show-correct{border-color:#2CB84B;background:#f0fdf4}
-.opt.disabled{cursor:default}
-.opt-key{width:30px;height:30px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#888;flex-shrink:0;transition:all 0.15s}
-.opt.correct .opt-key,.opt.show-correct .opt-key{background:#2CB84B;border-color:#2CB84B;color:#fff}
+
+/* Option states */
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid #E5E7EB;border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fff;user-select:none}
+.opt:hover:not(.locked){border-color:#1A35BB;background:#EFF6FF}
+.opt.selected{border-color:#1A35BB;background:#EFF6FF}
+.opt.selected .opt-key{background:#1A35BB;border-color:#1A35BB;color:#fff}
+.opt.correct{border-color:#059669;background:#ECFDF5}
+.opt.correct .opt-key{background:#059669;border-color:#059669;color:#fff}
+.opt.wrong{border-color:#DC2626;background:#FEF2F2}
 .opt.wrong .opt-key{background:#DC2626;border-color:#DC2626;color:#fff}
-.opt-text{font-size:14px;color:#1a1a1a;line-height:1.45}
+.opt.show-correct{border-color:#059669;background:#ECFDF5}
+.opt.show-correct .opt-key{background:#059669;border-color:#059669;color:#fff}
+.opt.locked{cursor:default}
+.opt-key{width:30px;height:30px;border-radius:50%;border:1.5px solid #D1D5DB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#6B7280;flex-shrink:0;transition:all 0.15s}
+.opt-text{font-size:14px;color:#111833;line-height:1.45}
+
 .feedback{font-size:13px;margin:10px 0 4px;padding:10px 14px;border-radius:8px;display:none;font-weight:500}
 .feedback.show{display:block}
-.correct-fb{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
-.wrong-fb{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
-.q-footer{padding:14px 24px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f0f0}
-.q-counter{font-size:13px;color:#999}
-.next-btn{background:#2CB84B;color:#fff;border:none;padding:10px 26px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s}
-.next-btn:hover{background:#27a843}
-.next-btn:disabled{background:#e0e0e0;color:#aaa;cursor:default}
+.correct-fb{background:#ECFDF5;color:#065F46;border:1px solid #6EE7B7}
+.wrong-fb{background:#FEF2F2;color:#991B1B;border:1px solid #FECACA}
 
-/* Result screen */
+.q-footer{padding:14px 24px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #F3F4F6}
+.q-counter{font-size:13px;color:#9CA3AF}
+.next-btn{background:#1A35BB;color:#fff;border:none;padding:10px 26px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.next-btn:hover:not(:disabled){background:#152da0}
+.next-btn:disabled{background:#E5E7EB;color:#9CA3AF;cursor:default}
+
+/* ── RESULT ── */
 #result-screen{display:none;flex-direction:column;align-items:center;gap:1.2rem;padding:2.5rem 2rem;text-align:center}
-.score-ring{width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
-.score-ring.pass-ring{background:#2CB84B}
-.score-ring.fail-ring{background:#DC2626}
+.score-ring{width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.pass-ring{background:#1A35BB}
+.fail-ring{background:#DC2626}
 .score-big{font-size:36px;font-weight:700;line-height:1}
 .score-of{font-size:14px;opacity:0.85;margin-top:2px}
-.result-name{font-size:20px;font-weight:600;color:#1a1a1a}
-.result-grade{font-size:14px;color:#666}
-.timed-out{background:#fef2f2;color:#991b1b;font-size:13px;font-weight:500;padding:8px 18px;border-radius:20px;border:1px solid #fecaca}
-.pass-banner{background:#f0fdf4;border:1.5px solid #2CB84B;border-radius:12px;padding:16px 20px;max-width:420px;color:#166534;font-size:14px;font-weight:500;line-height:1.6}
-.fail-banner{background:#fef2f2;border:1.5px solid #DC2626;border-radius:12px;padding:16px 20px;max-width:420px;color:#991b1b;font-size:14px;font-weight:500;line-height:1.6}
+.result-name{font-size:20px;font-weight:600;color:#111833}
+.result-grade{font-size:14px;color:#6B7280}
+.timed-out{background:#FEF2F2;color:#991B1B;font-size:13px;font-weight:500;padding:8px 18px;border-radius:20px;border:1px solid #FECACA}
+.pass-banner{background:#EFF6FF;border:1.5px solid #1A35BB;border-radius:12px;padding:16px 20px;max-width:420px;color:#1E3A8A;font-size:14px;font-weight:500;line-height:1.6}
+.fail-banner{background:#FEF2F2;border:1.5px solid #DC2626;border-radius:12px;padding:16px 20px;max-width:420px;color:#991B1B;font-size:14px;font-weight:500;line-height:1.6}
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:420px}
-.stat{background:#f4f7fb;border-radius:10px;padding:14px 10px;text-align:center}
-.stat-val{font-size:22px;font-weight:700;color:#1a1a1a}
-.stat-lbl{font-size:11px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:0.4px}
-.pass-mark-note{font-size:12px;color:#aaa}
-.grade-msg{font-size:13px;color:#666;max-width:360px;line-height:1.65}
-.btb-footer{font-size:12px;color:#ccc;margin-top:8px}
+.stat{background:#F4F7FB;border-radius:10px;padding:14px 10px;text-align:center}
+.stat-val{font-size:22px;font-weight:700;color:#111833}
+.stat-lbl{font-size:11px;color:#6B7280;margin-top:3px;text-transform:uppercase;letter-spacing:0.4px}
+.pass-note{font-size:12px;color:#9CA3AF}
+.grade-msg{font-size:13px;color:#6B7280;max-width:360px;line-height:1.65}
+.btb-foot{font-size:12px;color:#D1D5DB;margin-top:8px}
+
+/* ── LOCKED screen (already taken) ── */
+#locked-screen{display:none;flex-direction:column;align-items:center;gap:1.4rem;padding:3rem 2rem;text-align:center}
+.lock-icon{width:64px;height:64px;background:#F4F7FB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px}
+.lock-title{font-size:20px;font-weight:600;color:#111833}
+.lock-sub{font-size:14px;color:#6B7280;line-height:1.7;max-width:340px}
+.lock-score{background:#EFF6FF;border:1.5px solid #1A35BB;border-radius:12px;padding:14px 24px;color:#111833;font-size:15px;font-weight:500}
 </style>
 </head>
 <body>
 <div class="card">
+
+<!-- LOCKED: already taken -->
+<div id="locked-screen">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Assessment Already Submitted</div>
+  <div class="lock-sub">You have already completed this assessment. Each student is allowed one attempt only.</div>
+  <div class="lock-score" id="lock-score"></div>
+  <div class="btb-foot">BTB Data Analysis Bootcamp 2026 &mdash; Cohort 1</div>
+</div>
 
 <!-- START -->
 <div id="start-screen">
@@ -91,10 +115,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="start-sub">Final Assessment — 60 questions across all modules. You have 30 minutes. The exam auto-submits when time runs out.</div>
   <input class="name-input" id="student-name" placeholder="Enter your full name" maxlength="60"/>
   <div class="info-grid">
-    <div class="info-card"><div class="info-card-label">Questions</div><div class="info-card-val">60</div></div>
-    <div class="info-card"><div class="info-card-label">Time limit</div><div class="info-card-val">30 minutes</div></div>
-    <div class="info-card"><div class="info-card-label">Pass mark</div><div class="info-card-val">31 / 60</div></div>
-    <div class="info-card"><div class="info-card-label">Attempts</div><div class="info-card-val">1 only</div></div>
+    <div class="info-card"><div class="info-label">Questions</div><div class="info-val">60</div></div>
+    <div class="info-card"><div class="info-label">Time limit</div><div class="info-val">30 minutes</div></div>
+    <div class="info-card"><div class="info-label">Pass mark</div><div class="info-val">31 / 60</div></div>
+    <div class="info-card"><div class="info-label">Attempts</div><div class="info-val">1 only</div></div>
   </div>
   <button class="start-btn" onclick="startQuiz()">Begin Assessment</button>
   <div class="disclaimer">Once you start, the timer cannot be paused. Make sure you are in a quiet place before clicking Begin.</div>
@@ -104,7 +128,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="quiz-screen">
   <div class="hdr">
     <span class="hdr-title">BTB Final Assessment</span>
-    <span class="timer" id="timer">30:00</span>
+    <div class="hdr-right">
+      <span class="timer" id="timer">30:00</span>
+    </div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
   <div class="q-body">
@@ -137,15 +163,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="stat"><div class="stat-val" id="s-wrong">0</div><div class="stat-lbl">Wrong</div></div>
     <div class="stat"><div class="stat-val" id="s-pct">0%</div><div class="stat-lbl">Score</div></div>
   </div>
-  <div class="pass-mark-note">Pass mark: 31 out of 60 &nbsp;|&nbsp; 51%</div>
+  <div class="pass-note">Pass mark: 31 out of 60 &nbsp;|&nbsp; 51%</div>
   <div class="grade-msg" id="grade-msg"></div>
-  <div class="btb-footer">BTB Data Analysis Bootcamp 2026 &mdash; Cohort 1</div>
+  <div class="btb-foot">BTB Data Analysis Bootcamp 2026 &mdash; Cohort 1</div>
 </div>
 
-</div>
+</div><!-- .card -->
 
 <script>
-const Q=[
+const STORAGE_KEY = "btb_quiz_2026_cohort1";
+const PASS = 31;
+let cur = 0, score = 0, selectedOpt = null, confirmed = false;
+let interval = null, left = 1800, timedOut = false, studentName = "";
+
+const Q = [
   {s:"Excel",q:"You have sales data in column B (B2:B100). Which formula gives you the total sales?",o:["=COUNT(B2:B100)","=SUM(B2:B100)","=AVERAGE(B2:B100)","=MAX(B2:B100)"],a:1},
   {s:"Excel",q:"After cleaning a dataset, you expect 45 rows. Which formula confirms the exact number of numeric entries in column F?",o:["=SUM(F2:F50)","=COUNTA(F2:F50)","=COUNT(F2:F50)","=ROWS(F2:F50)"],a:2},
   {s:"Excel",q:"A cell shows #N/A after a VLOOKUP. What does this most likely mean?",o:["The formula syntax is wrong","The lookup value was not found in the table","The column index number is too large","The range is not sorted"],a:1},
@@ -153,10 +184,10 @@ const Q=[
   {s:"Excel",q:"What is the correct VLOOKUP formula to find the price of 'Rice' where Product is in column A and Price is in column C?",o:["=VLOOKUP(\"Rice\",A:C,2,FALSE)","=VLOOKUP(\"Rice\",A:C,3,FALSE)","=VLOOKUP(\"Rice\",A:C,3,TRUE)","=VLOOKUP(A2,A:C,1,FALSE)"],a:1},
   {s:"Excel",q:"You have a Pivot Table showing total revenue by branch. You add a slicer for 'Category'. What does the slicer do?",o:["Adds a new column to the pivot table","Filters the pivot table results interactively","Sorts the pivot table alphabetically","Changes the chart type"],a:1},
   {s:"Excel",q:"Which of the following best describes the purpose of a Pivot Table?",o:["It stores raw data in a structured format","It summarises and aggregates data without changing the source","It creates formulas automatically for each row","It removes duplicate values from a dataset"],a:1},
-  {s:"Excel",q:"A column meant to hold revenue figures shows values left-aligned in the cells. What does this indicate?",o:["The column has been formatted as currency","The numbers are correct but unsorted","The values are stored as text, not numbers","The column has conditional formatting applied"],a:2},
+  {s:"Excel",q:"A column meant to hold revenue figures shows values left-aligned. What does this indicate?",o:["The column has been formatted as currency","The numbers are correct but unsorted","The values are stored as text, not numbers","The column has conditional formatting applied"],a:2},
   {s:"Excel",q:"You want to calculate total revenue ONLY for the 'Lagos' branch. Which formula works?",o:["=COUNTIF(B2:B100,\"Lagos\",C2:C100)","=SUMIF(B2:B100,\"Lagos\",C2:C100)","=SUM(B2:B100,\"Lagos\")","=SUMIFS(C2:C100,\"Lagos\")"],a:1},
   {s:"Excel",q:"What is the main difference between COUNT and COUNTA?",o:["COUNT adds values; COUNTA counts rows","COUNT only counts numeric cells; COUNTA counts all non-empty cells","COUNT works on text; COUNTA works on numbers","There is no difference between them"],a:1},
-  {s:"Excel",q:"Which chart type is most appropriate for showing how monthly revenue changes over a 12-month period?",o:["Pie chart","Bar chart","Line chart","Scatter chart"],a:2},
+  {s:"Excel",q:"Which chart type is most appropriate for showing how monthly revenue changes over 12 months?",o:["Pie chart","Bar chart","Line chart","Scatter chart"],a:2},
   {s:"Excel",q:"What does the MIN function return when applied to a range of revenue values?",o:["The average revenue across the range","The most frequently occurring revenue value","The smallest revenue value in the range","The first value in the range"],a:2},
   {s:"Excel",q:"A dataset has 50 rows but one row is an exact duplicate. After removing duplicates, how many rows remain?",o:["50","49","48","It depends on which row is the duplicate"],a:1},
   {s:"Excel",q:"You want to lock the reference to cell B1 so it doesn't change when you drag a formula down. Which is correct?",o:["B1","$B1","B$1","$B$1"],a:3},
@@ -192,7 +223,7 @@ const Q=[
   {s:"Power BI",q:"A student's measure returns BLANK on some visuals. Why does this happen?",o:["The measure has a syntax error","The data source is unavailable","DAX returns BLANK when there is no data for that filter combination — it is expected behaviour","BLANK means the measure needs to be recalculated"],a:2},
   {s:"Power BI",q:"What is the purpose of creating a dedicated Measures table in Power BI?",o:["To store raw data separately from the fact table","To keep all DAX measures organised in one place instead of scattered across multiple tables","To create a backup of the data model","Measures tables are required by Power BI to load the report"],a:1},
   {s:"Analytics",q:"What is the difference between structured and unstructured data?",o:["Structured data is large; unstructured data is small","Structured data is organised in rows and columns; unstructured data has no predefined format","Structured data is stored in the cloud; unstructured data is stored locally","Structured data requires Python; unstructured data requires Excel"],a:1},
-  {s:"Analytics",q:"A dataset shows that ice cream sales increase as drowning incidents increase. What is the correct interpretation?",o:["Ice cream causes drowning","Drowning causes people to buy ice cream","There is a correlation, likely explained by a third variable such as hot weather","The data is incorrect and should be cleaned"],a:2},
+  {s:"Analytics",q:"A dataset shows ice cream sales and drowning incidents both increase together. What is the correct interpretation?",o:["Ice cream causes drowning","Drowning causes people to buy ice cream","There is a correlation, likely explained by a third variable such as hot weather","The data is incorrect and should be cleaned"],a:2},
   {s:"Analytics",q:"Which of these best describes a KPI?",o:["A type of chart used to compare categories","A raw column in a dataset","A measurable value that indicates how well a business objective is being met","A formula that calculates running totals"],a:2},
   {s:"Analytics",q:"A data analyst receives a brief asking 'Why did sales drop in Q3?' What type of analysis is being requested?",o:["Descriptive","Diagnostic","Predictive","Prescriptive"],a:1},
   {s:"Analytics",q:"What does a data dictionary contain?",o:["A list of all DAX formulas in a report","The definitions, data types and descriptions of all columns in a dataset","A glossary of Excel keyboard shortcuts","A record of who accessed the data and when"],a:1},
@@ -205,104 +236,147 @@ const Q=[
   {s:"Analytics",q:"What does data granularity refer to?",o:["The number of charts in a report","How messy or clean a dataset is","The level of detail captured in each row of a dataset","The number of tables in a data model"],a:2},
   {s:"Analytics",q:"Why is it important to understand your audience before building a dashboard?",o:["Different audiences use different tools","The right level of detail and the right metrics depend on what decisions that audience needs to make","Some audiences cannot read charts","Audience size determines how many visuals you need"],a:1},
   {s:"Python",q:"In pandas, what does df.shape return?",o:["The column names of the DataFrame","The data types of each column","A tuple showing the number of rows and columns in the DataFrame","The first 5 rows of the DataFrame"],a:2},
-  {s:"Python",q:"A student runs df.isnull().sum() and sees 47 next to the column 'Revenue'. What does this mean?",o:["There are 47 rows where Revenue is zero","The Revenue column has 47 missing values","47 rows have been removed from the DataFrame","The Revenue column contains 47 unique values"],a:1},
+  {s:"Python",q:"A student runs df.isnull().sum() and sees 47 next to 'Revenue'. What does this mean?",o:["There are 47 rows where Revenue is zero","The Revenue column has 47 missing values","47 rows have been removed from the DataFrame","The Revenue column contains 47 unique values"],a:1},
   {s:"Python",q:"What is the difference between df.drop_duplicates() and df.dropna()?",o:["drop_duplicates removes empty rows; dropna removes repeated rows","They both remove null values but from different axes","drop_duplicates removes repeated rows; dropna removes rows with missing values","They are the same function with different names"],a:2}
 ];
 
-const PASS=31;
-let cur=0,score=0,answered=false,interval=null,left=1800,timedOut=false,name="";
+// ── Check if already attempted ──────────────────────────────────────────
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    const data = JSON.parse(saved);
+    document.getElementById("start-screen").style.display = "none";
+    const ls = document.getElementById("locked-screen");
+    ls.style.display = "flex";
+    ls.style.flexDirection = "column";
+    document.getElementById("lock-score").textContent =
+      data.name + " — " + data.score + "/60 (" + data.pct + "%) · " + data.grade;
+  }
+});
 
-function startQuiz(){
-  const n=document.getElementById("student-name").value.trim();
-  if(!n){document.getElementById("student-name").classList.add("error");return;}
-  name=n;
-  document.getElementById("start-screen").style.display="none";
-  const qs=document.getElementById("quiz-screen");
-  qs.style.display="flex";qs.style.flexDirection="column";
-  interval=setInterval(tick,1000);
+function startQuiz() {
+  const n = document.getElementById("student-name").value.trim();
+  if (!n) { document.getElementById("student-name").classList.add("err"); return; }
+  studentName = n;
+  document.getElementById("start-screen").style.display = "none";
+  const qs = document.getElementById("quiz-screen");
+  qs.style.display = "flex";
+  qs.style.flexDirection = "column";
+  interval = setInterval(tick, 1000);
   render();
 }
 
-function tick(){
+function tick() {
   left--;
-  const m=Math.floor(left/60),s=left%60;
-  const el=document.getElementById("timer");
-  el.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-  if(left<=300)el.classList.add("warn");
-  if(left<=0){clearInterval(interval);timedOut=true;finish();}
+  const m = Math.floor(left / 60), s = left % 60;
+  const el = document.getElementById("timer");
+  el.textContent = String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+  if (left <= 300) el.classList.add("warn");
+  if (left <= 0) { clearInterval(interval); timedOut = true; finish(); }
 }
 
-function render(){
-  const q=Q[cur];
-  document.getElementById("q-num").textContent="Question "+(cur+1)+" of 60";
-  document.getElementById("q-section").textContent=q.s;
-  document.getElementById("q-text").textContent=q.q;
-  document.getElementById("q-counter").textContent=(cur+1)+" / 60";
-  document.getElementById("progress-bar").style.width=((cur/60)*100)+"%";
-  const opts=document.getElementById("options");
-  opts.innerHTML="";
-  ["A","B","C","D"].forEach((k,i)=>{
-    const d=document.createElement("div");
-    d.className="opt";d.dataset.i=i;
-    d.innerHTML=`<div class="opt-key">${k}</div><div class="opt-text">${q.o[i]}</div>`;
-    d.onclick=()=>pick(i);
+function render() {
+  const q = Q[cur];
+  selectedOpt = null;
+  confirmed = false;
+  document.getElementById("q-num").textContent = "Question " + (cur + 1) + " of 60";
+  document.getElementById("q-section").textContent = q.s;
+  document.getElementById("q-text").textContent = q.q;
+  document.getElementById("q-counter").textContent = (cur + 1) + " / 60";
+  document.getElementById("progress-bar").style.width = ((cur / 60) * 100) + "%";
+  const opts = document.getElementById("options");
+  opts.innerHTML = "";
+  ["A","B","C","D"].forEach((k, i) => {
+    const d = document.createElement("div");
+    d.className = "opt";
+    d.dataset.i = i;
+    d.innerHTML = `<div class="opt-key">${k}</div><div class="opt-text">${q.o[i]}</div>`;
+    d.onclick = () => selectOpt(i);
     opts.appendChild(d);
   });
-  const fb=document.getElementById("feedback");
-  fb.className="feedback";fb.textContent="";
-  const nb=document.getElementById("next-btn");
-  nb.disabled=true;nb.textContent=cur===59?"Submit":"Next";
-  answered=false;
+  const fb = document.getElementById("feedback");
+  fb.className = "feedback";
+  fb.textContent = "";
+  const nb = document.getElementById("next-btn");
+  nb.disabled = true;
+  nb.textContent = cur === 59 ? "Submit" : "Next";
 }
 
-function pick(i){
-  if(answered)return;
-  answered=true;
-  const q=Q[cur];
-  const opts=document.querySelectorAll(".opt");
-  opts.forEach(o=>o.classList.add("disabled"));
-  opts[i].classList.add(i===q.a?"correct":"wrong");
-  if(i===q.a)score++;
+function selectOpt(i) {
+  if (confirmed) return;
+  selectedOpt = i;
+  // Highlight selected, clear others
+  document.querySelectorAll(".opt").forEach((o, idx) => {
+    o.classList.remove("selected");
+    if (idx === i) o.classList.add("selected");
+  });
+  // Enable next / submit
+  document.getElementById("next-btn").disabled = false;
+}
+
+function nextQ() {
+  if (selectedOpt === null) return;
+  confirmed = true;
+  const q = Q[cur];
+  const opts = document.querySelectorAll(".opt");
+  // Lock all options
+  opts.forEach(o => o.classList.add("locked"));
+  // Show correct / wrong
+  opts[selectedOpt].classList.remove("selected");
+  opts[selectedOpt].classList.add(selectedOpt === q.a ? "correct" : "wrong");
+  if (selectedOpt === q.a) score++;
   else opts[q.a].classList.add("show-correct");
-  const fb=document.getElementById("feedback");
-  fb.className="feedback show "+(i===q.a?"correct-fb":"wrong-fb");
-  fb.textContent=i===q.a?"Correct!":"Incorrect. The correct answer is "+["A","B","C","D"][q.a]+".";
-  document.getElementById("next-btn").disabled=false;
+  // Feedback
+  const fb = document.getElementById("feedback");
+  fb.className = "feedback show " + (selectedOpt === q.a ? "correct-fb" : "wrong-fb");
+  fb.textContent = selectedOpt === q.a
+    ? "Correct!"
+    : "Incorrect. The correct answer is " + ["A","B","C","D"][q.a] + ".";
+  // Change button
+  const nb = document.getElementById("next-btn");
+  nb.textContent = cur === 59 ? "See Results" : "Next Question";
+  nb.onclick = () => {
+    if (cur === 59) { finish(); return; }
+    cur++;
+    nb.onclick = nextQ;
+    render();
+  };
 }
 
-function nextQ(){
-  if(cur===59){finish();return;}
-  cur++;render();
-}
-
-function finish(){
+function finish() {
   clearInterval(interval);
-  document.getElementById("quiz-screen").style.display="none";
-  const rs=document.getElementById("result-screen");
-  rs.style.display="flex";rs.style.flexDirection="column";
-  const pct=Math.round((score/60)*100);
-  const passed=score>=PASS;
-  document.getElementById("score-big").textContent=score;
-  document.getElementById("result-name").textContent=name;
-  document.getElementById("s-correct").textContent=score;
-  document.getElementById("s-wrong").textContent=60-score;
-  document.getElementById("s-pct").textContent=pct+"%";
-  const ring=document.getElementById("score-ring");
-  ring.className="score-ring "+(passed?"pass-ring":"fail-ring");
-  if(timedOut){
-    document.getElementById("timed-out-wrap").innerHTML='<div class="timed-out">Time ran out — exam auto-submitted</div>';
+  document.getElementById("quiz-screen").style.display = "none";
+  const rs = document.getElementById("result-screen");
+  rs.style.display = "flex";
+  rs.style.flexDirection = "column";
+  const pct = Math.round((score / 60) * 100);
+  const passed = score >= PASS;
+  document.getElementById("score-big").textContent = score;
+  document.getElementById("result-name").textContent = studentName;
+  document.getElementById("s-correct").textContent = score;
+  document.getElementById("s-wrong").textContent = 60 - score;
+  document.getElementById("s-pct").textContent = pct + "%";
+  document.getElementById("score-ring").className = "score-ring " + (passed ? "pass-ring" : "fail-ring");
+  if (timedOut) {
+    document.getElementById("timed-out-wrap").innerHTML =
+      '<div class="timed-out">Time ran out — exam auto-submitted</div>';
   }
-  const firstName=name.split(" ")[0];
-  document.getElementById("banner").innerHTML=passed
-    ?`<div class="pass-banner">Congratulations, ${firstName}! You passed the BTB Final Assessment with ${score}/60. Well done on completing the bootcamp — this is a real achievement.</div>`
-    :`<div class="fail-banner">You scored ${score}/60 and did not reach the pass mark of ${PASS} this time. Keep going — use your capstone project to reinforce the concepts and show what you've learned.</div>`;
-  let grade,msg;
-  if(pct>=80){grade="Distinction";msg="Outstanding result. You demonstrated a strong command of every module covered in the bootcamp.";}
-  else if(pct>=65){grade="Merit";msg="Great work. You have a solid grasp of the core concepts. Keep building on this foundation.";}
-  else if(pct>=52){grade="Pass";msg:"You passed. There are a few areas to revisit — your capstone project is a great opportunity to strengthen them.";}
-  else{grade="Did not pass";msg="The concepts are there — review the modules and apply them hands-on. You can get there.";}
-  document.getElementById("result-grade").textContent=grade+" · "+pct+"%";
-  document.getElementById("grade-msg").textContent=msg;
+  const firstName = studentName.split(" ")[0];
+  document.getElementById("banner").innerHTML = passed
+    ? `<div class="pass-banner">Congratulations, ${firstName}! You passed the BTB Final Assessment with ${score}/60. Well done on completing the bootcamp.</div>`
+    : `<div class="fail-banner">You scored ${score}/60 and did not reach the pass mark of ${PASS} this time. Keep going — use your capstone project to reinforce the concepts.</div>`;
+  let grade, msg;
+  if (pct >= 80)      { grade = "Distinction"; msg = "Outstanding result. You demonstrated a strong command of every module covered in the bootcamp."; }
+  else if (pct >= 65) { grade = "Merit";       msg = "Great work. You have a solid grasp of the core concepts. Keep building on this foundation."; }
+  else if (pct >= 52) { grade = "Pass";        msg = "You passed. There are a few areas to revisit — your capstone project is a great opportunity to strengthen them."; }
+  else                { grade = "Did not pass";msg = "The concepts are there — review the modules and apply them hands-on. You can get there."; }
+  document.getElementById("result-grade").textContent = grade + " · " + pct + "%";
+  document.getElementById("grade-msg").textContent = msg;
+  // Save result to localStorage so retakes are blocked
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    name: studentName, score, pct, grade,
+    submittedAt: new Date().toISOString()
+  }));
 }
 </script>
 </body>
