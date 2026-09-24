@@ -39,10 +39,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .q-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .q-num{font-size:12px;color:#9CA3AF}
 .section-badge{background:#EFF6FF;color:#1A35BB;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.4px}
-.q-text{font-size:16px;font-weight:500;color:#111833;line-height:1.55;margin-bottom:20px}
+.q-text{font-size:16px;font-weight:500;color:#111833;line-height:1.55;margin-bottom:20px;white-space:pre-line}
 .options{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
 
-/* Option states */
 .opt{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid #E5E7EB;border-radius:10px;cursor:pointer;transition:all 0.15s;background:#fff;user-select:none}
 .opt:hover:not(.locked){border-color:#1A35BB;background:#EFF6FF}
 .opt.selected{border-color:#1A35BB;background:#EFF6FF}
@@ -55,7 +54,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .opt.show-correct .opt-key{background:#059669;border-color:#059669;color:#fff}
 .opt.locked{cursor:default}
 .opt-key{width:30px;height:30px;border-radius:50%;border:1.5px solid #D1D5DB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#6B7280;flex-shrink:0;transition:all 0.15s}
-.opt-text{font-size:14px;color:#111833;line-height:1.45}
+.opt-text{font-size:14px;color:#111833;line-height:1.45;font-family:inherit}
 
 .feedback{font-size:13px;margin:10px 0 4px;padding:10px 14px;border-radius:8px;display:none;font-weight:500}
 .feedback.show{display:block}
@@ -112,11 +111,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="start-screen">
   <div class="logo">B</div>
   <div class="start-title">BTB Bootcamp 2026</div>
-  <div class="start-sub">Final Assessment — 60 questions across all modules. You have 30 minutes. The exam auto-submits when time runs out.</div>
+  <div class="start-sub">Final Assessment — 60 questions across all modules. You have 60 minutes. The exam auto-submits when time runs out.</div>
   <input class="name-input" id="student-name" placeholder="Enter your full name" maxlength="60"/>
   <div class="info-grid">
     <div class="info-card"><div class="info-label">Questions</div><div class="info-val">60</div></div>
-    <div class="info-card"><div class="info-label">Time limit</div><div class="info-val">30 minutes</div></div>
+    <div class="info-card"><div class="info-label">Time limit</div><div class="info-val">60 minutes</div></div>
     <div class="info-card"><div class="info-label">Pass mark</div><div class="info-val">31 / 60</div></div>
     <div class="info-card"><div class="info-label">Attempts</div><div class="info-val">1 only</div></div>
   </div>
@@ -129,7 +128,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="hdr">
     <span class="hdr-title">BTB Final Assessment</span>
     <div class="hdr-right">
-      <span class="timer" id="timer">30:00</span>
+      <span class="timer" id="timer">60:00</span>
     </div>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
@@ -171,73 +170,77 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div><!-- .card -->
 
 <script>
-const STORAGE_KEY = "btb_quiz_2026_cohort1";
+const STORAGE_KEY = "btb_quiz_2026_cohort1_v2";
 const PASS = 31;
 let cur = 0, score = 0, selectedOpt = null, confirmed = false;
-let interval = null, left = 1800, timedOut = false, studentName = "";
+let interval = null, left = 3600, timedOut = false, studentName = "";
 
+// Order: Analytics (10) -> Excel (12) -> SQL (20) -> Power BI (15) -> Analytics (3) = 60
 const Q = [
-  {s:"Excel",q:"You have sales data in column B (B2:B100). Which formula gives you the total sales?",o:["=COUNT(B2:B100)","=SUM(B2:B100)","=AVERAGE(B2:B100)","=MAX(B2:B100)"],a:1},
-  {s:"Excel",q:"After cleaning a dataset, you expect 45 rows. Which formula confirms the exact number of numeric entries in column F?",o:["=SUM(F2:F50)","=COUNTA(F2:F50)","=COUNT(F2:F50)","=ROWS(F2:F50)"],a:2},
-  {s:"Excel",q:"A cell shows #N/A after a VLOOKUP. What does this most likely mean?",o:["The formula syntax is wrong","The lookup value was not found in the table","The column index number is too large","The range is not sorted"],a:1},
-  {s:"Excel",q:"You want to count how many transactions in column C contain the word 'Lagos'. Which formula is correct?",o:["=COUNT(C2:C100,\"Lagos\")","=SUMIF(C2:C100,\"Lagos\")","=COUNTIF(C2:C100,\"Lagos\")","=COUNTA(C2:C100,\"Lagos\")"],a:2},
-  {s:"Excel",q:"What is the correct VLOOKUP formula to find the price of 'Rice' where Product is in column A and Price is in column C?",o:["=VLOOKUP(\"Rice\",A:C,2,FALSE)","=VLOOKUP(\"Rice\",A:C,3,FALSE)","=VLOOKUP(\"Rice\",A:C,3,TRUE)","=VLOOKUP(A2,A:C,1,FALSE)"],a:1},
-  {s:"Excel",q:"You have a Pivot Table showing total revenue by branch. You add a slicer for 'Category'. What does the slicer do?",o:["Adds a new column to the pivot table","Filters the pivot table results interactively","Sorts the pivot table alphabetically","Changes the chart type"],a:1},
-  {s:"Excel",q:"Which of the following best describes the purpose of a Pivot Table?",o:["It stores raw data in a structured format","It summarises and aggregates data without changing the source","It creates formulas automatically for each row","It removes duplicate values from a dataset"],a:1},
-  {s:"Excel",q:"A column meant to hold revenue figures shows values left-aligned. What does this indicate?",o:["The column has been formatted as currency","The numbers are correct but unsorted","The values are stored as text, not numbers","The column has conditional formatting applied"],a:2},
-  {s:"Excel",q:"You want to calculate total revenue ONLY for the 'Lagos' branch. Which formula works?",o:["=COUNTIF(B2:B100,\"Lagos\",C2:C100)","=SUMIF(B2:B100,\"Lagos\",C2:C100)","=SUM(B2:B100,\"Lagos\")","=SUMIFS(C2:C100,\"Lagos\")"],a:1},
-  {s:"Excel",q:"What is the main difference between COUNT and COUNTA?",o:["COUNT adds values; COUNTA counts rows","COUNT only counts numeric cells; COUNTA counts all non-empty cells","COUNT works on text; COUNTA works on numbers","There is no difference between them"],a:1},
-  {s:"Excel",q:"Which chart type is most appropriate for showing how monthly revenue changes over 12 months?",o:["Pie chart","Bar chart","Line chart","Scatter chart"],a:2},
-  {s:"Excel",q:"What does the MIN function return when applied to a range of revenue values?",o:["The average revenue across the range","The most frequently occurring revenue value","The smallest revenue value in the range","The first value in the range"],a:2},
-  {s:"Excel",q:"A dataset has 50 rows but one row is an exact duplicate. After removing duplicates, how many rows remain?",o:["50","49","48","It depends on which row is the duplicate"],a:1},
-  {s:"Excel",q:"You want to lock the reference to cell B1 so it doesn't change when you drag a formula down. Which is correct?",o:["B1","$B1","B$1","$B$1"],a:3},
-  {s:"Excel",q:"What does conditional formatting do in Excel?",o:["It changes the formula in a cell based on its value","It applies visual formatting to cells based on rules you define","It filters rows that meet a certain condition","It calculates values only when a condition is true"],a:1},
-  {s:"SQL",q:"Which SQL clause is used to filter rows based on a condition?",o:["ORDER BY","GROUP BY","WHERE","HAVING"],a:2},
-  {s:"SQL",q:"What does SELECT COUNT(*) FROM orders WHERE status = 'Completed' return?",o:["The total revenue of completed orders","The number of completed orders","A list of all completed orders","The number of columns in the orders table"],a:1},
-  {s:"SQL",q:"What is the difference between WHERE and HAVING in SQL?",o:["WHERE filters individual rows; HAVING filters grouped results","WHERE is for text columns; HAVING is for numeric columns","They are interchangeable","HAVING runs before WHERE in execution order"],a:0},
-  {s:"SQL",q:"What does SELECT DISTINCT city FROM customers return?",o:["The number of cities in the table","All rows where city is not null","Each city name listed only once","Cities sorted alphabetically"],a:2},
-  {s:"SQL",q:"A table called trips has 10,000 rows. What does SELECT * FROM trips LIMIT 10 return?",o:["The 10 most recent trips","The 10 highest-value trips","The first 10 rows as stored in the table","A random sample of 10 trips"],a:2},
-  {s:"SQL",q:"Which JOIN type returns only rows that have matching values in BOTH tables?",o:["LEFT JOIN","RIGHT JOIN","FULL OUTER JOIN","INNER JOIN"],a:3},
-  {s:"SQL",q:"You want to find all customers who have NEVER placed an order. Which approach is correct?",o:["INNER JOIN customers and orders, filter where order_id IS NULL","LEFT JOIN customers to orders, filter where order_id IS NULL","RIGHT JOIN orders to customers, filter where customer_id IS NULL","Use WHERE customer_id NOT IN customers"],a:1},
-  {s:"SQL",q:"What does ORDER BY revenue DESC do?",o:["Sorts results from lowest to highest revenue","Removes duplicate revenue values","Sorts results from highest to lowest revenue","Filters out null revenue values"],a:2},
-  {s:"SQL",q:"Which correctly counts completed trips per driver?",o:["SELECT driver_id, COUNT(*) FROM trips GROUP BY driver_id WHERE status='Completed'","SELECT driver_id FROM trips WHERE status='Completed' GROUP BY driver_id","SELECT driver_id, COUNT(*) FROM trips WHERE status='Completed' GROUP BY driver_id","SELECT COUNT(*), driver_id FROM trips HAVING status='Completed'"],a:2},
-  {s:"SQL",q:"A table has 500 rows where 200 have null in the rating column. What does SELECT COUNT(rating) FROM trips return?",o:["500","200","300","0"],a:2},
-  {s:"SQL",q:"Which SQL keyword combines rows from two queries that have the same columns?",o:["JOIN","MERGE","UNION","APPEND"],a:2},
-  {s:"SQL",q:"What does SELECT city, AVG(fare) FROM trips GROUP BY city ORDER BY AVG(fare) DESC return?",o:["The city with the highest single fare","The average fare per city sorted from highest to lowest","All fares grouped by city in ascending order","The total fare per city"],a:1},
-  {s:"SQL",q:"What does the LIKE operator do in SQL?",o:["Checks if a value equals another value exactly","Joins two tables on a matching column","Filters rows based on a pattern match","Returns results in alphabetical order"],a:2},
-  {s:"SQL",q:"A query uses HAVING COUNT(*) > 10. What does this filter?",o:["Rows where the count column is greater than 10","Individual rows that appear more than 10 times","Groups that contain more than 10 rows","The top 10 groups by count"],a:2},
-  {s:"SQL",q:"What does the AS keyword do in SQL?",o:["It creates a new table","It renames a column or table temporarily in the query output","It joins two tables together","It filters rows based on a condition"],a:1},
-  {s:"Power BI",q:"What is the difference between a Measure and a Calculated Column in Power BI?",o:["Measures are stored in the table; Calculated Columns are computed on demand","Measures are computed on demand in filter context; Calculated Columns are computed row by row at load time","They are the same thing with different names","Calculated Columns use DAX; Measures use M code"],a:1},
-  {s:"Power BI",q:"You create Total Revenue = SUM(fact_Trips[Net_Fare_NGN]) and place it on a card filtered by Lagos. What does the card show?",o:["Total revenue across all cities","Total revenue for Lagos only, because the visual filter changes the context","An error because CALCULATE is required for filters","The maximum fare in Lagos"],a:1},
-  {s:"Power BI",q:"What does DIVIDE([Total Revenue],[Total Trips]) do compared to [Total Revenue]/[Total Trips]?",o:["They are identical in all cases","DIVIDE handles blank or zero denominators gracefully and prevents errors","DIVIDE is slower but more accurate","The slash operator handles blank denominators automatically"],a:1},
-  {s:"Power BI",q:"In Power Query, what is the difference between Remove Duplicates and Remove Errors?",o:["They do the same thing","Remove Duplicates deletes repeated rows; Remove Errors deletes rows with data errors","Remove Duplicates works on columns; Remove Errors works on rows","Remove Errors only works on numeric columns"],a:1},
-  {s:"Power BI",q:"What does CALCULATE(SUM(fact_Trips[Revenue]), fact_Trips[City]=\"Lagos\") do?",o:["Returns total revenue only where City equals Lagos","Counts all trips from Lagos","Returns Lagos revenue divided by total revenue","Filters the dim_Location table by Lagos"],a:0},
-  {s:"Power BI",q:"You have a slicer on page 1 but it doesn't filter visuals on page 2. What is the most likely reason?",o:["The slicer visual type is wrong","The slicer is not synced across pages","The relationship between tables is inactive","DAX measures cannot respond to slicers on other pages"],a:1},
-  {s:"Power BI",q:"What is the purpose of marking a table as a Date Table in Power BI?",o:["It formats the date column to show month names","It enables Power BI to use the table for time intelligence functions correctly","It automatically creates year, month and quarter columns","It links the date table to all other tables automatically"],a:1},
-  {s:"Power BI",q:"What does filter context mean in DAX?",o:["The M code context in Power Query","The set of filters applied to a measure at the time it evaluates","The relationship direction between tables","The row currently being calculated in a calculated column"],a:1},
-  {s:"Power BI",q:"Which correctly counts distinct customers who completed at least one trip?",o:["COUNT(fact_Trips[Customer_ID])","COUNTROWS(fact_Trips)","CALCULATE(DISTINCTCOUNT(fact_Trips[Customer_ID]), fact_Trips[Status]=\"Completed\")","DISTINCTCOUNT(dim_Customer[Customer_ID])"],a:2},
-  {s:"Power BI",q:"In a star schema, what type of data should the fact table ideally contain?",o:["Descriptive attributes like customer names and product descriptions","Measures, foreign keys and transaction-level records","Only date and time columns","Aggregated totals pre-calculated for each dimension"],a:1},
-  {s:"Power BI",q:"A student sets cross-filter direction to Both on a relationship. What is the main risk?",o:["The relationship becomes inactive","Measures will return blank values","Double-counting can occur in aggregations","The model will refuse to load"],a:2},
-  {s:"Power BI",q:"What is the correct way to apply a professional colour theme to all visuals at once in Power BI?",o:["Format each visual individually in the Format pane","Import a JSON theme file via View -> Themes","Use a calculated column to assign colours","Change the report background colour"],a:1},
-  {s:"Power BI",q:"What is the difference between Import mode and DirectQuery in Power BI?",o:["Import mode is faster because data is loaded into the model; DirectQuery queries the source live","DirectQuery stores a copy of the data; Import mode does not","Import mode only works with Excel; DirectQuery works with databases","They produce identical results and performance"],a:0},
-  {s:"Power BI",q:"A student's measure returns BLANK on some visuals. Why does this happen?",o:["The measure has a syntax error","The data source is unavailable","DAX returns BLANK when there is no data for that filter combination — it is expected behaviour","BLANK means the measure needs to be recalculated"],a:2},
-  {s:"Power BI",q:"What is the purpose of creating a dedicated Measures table in Power BI?",o:["To store raw data separately from the fact table","To keep all DAX measures organised in one place instead of scattered across multiple tables","To create a backup of the data model","Measures tables are required by Power BI to load the report"],a:1},
-  {s:"Analytics",q:"What is the difference between structured and unstructured data?",o:["Structured data is large; unstructured data is small","Structured data is organised in rows and columns; unstructured data has no predefined format","Structured data is stored in the cloud; unstructured data is stored locally","Structured data requires Python; unstructured data requires Excel"],a:1},
-  {s:"Analytics",q:"A dataset shows ice cream sales and drowning incidents both increase together. What is the correct interpretation?",o:["Ice cream causes drowning","Drowning causes people to buy ice cream","There is a correlation, likely explained by a third variable such as hot weather","The data is incorrect and should be cleaned"],a:2},
-  {s:"Analytics",q:"Which of these best describes a KPI?",o:["A type of chart used to compare categories","A raw column in a dataset","A measurable value that indicates how well a business objective is being met","A formula that calculates running totals"],a:2},
-  {s:"Analytics",q:"A data analyst receives a brief asking 'Why did sales drop in Q3?' What type of analysis is being requested?",o:["Descriptive","Diagnostic","Predictive","Prescriptive"],a:1},
-  {s:"Analytics",q:"What does a data dictionary contain?",o:["A list of all DAX formulas in a report","The definitions, data types and descriptions of all columns in a dataset","A glossary of Excel keyboard shortcuts","A record of who accessed the data and when"],a:1},
-  {s:"Analytics",q:"Which of the following is an example of a quantitative variable?",o:["Customer name","Product category","City of delivery","Revenue per transaction"],a:3},
-  {s:"Analytics",q:"A dashboard shows average delivery time is 38 minutes. A stakeholder asks if this is good or bad. What should the analyst do?",o:["Say it is good because it is under an hour","Provide context — compare against a target, benchmark or historical trend","Rebuild the dashboard to show individual delivery times","Remove the metric because it is subjective"],a:1},
-  {s:"Analytics",q:"What is the key difference between a dashboard and a report in business intelligence?",o:["A dashboard has more pages than a report","A report shows raw data; a dashboard shows processed data","A dashboard provides a high-level summary of key metrics; a report provides detailed drill-down analysis","They are the same thing"],a:2},
-  {s:"Analytics",q:"An analyst presents a pie chart with 14 segments. What is the main problem?",o:["Pie charts cannot show more than 5 segments in any BI tool","Too many segments make it impossible to compare proportions accurately","Pie charts should only be used for time-series data","There is no problem"],a:1},
-  {s:"Analytics",q:"What does ETL stand for?",o:["Export, Transform, Load","Extract, Transform, Load — pulling data from a source, cleaning it, and loading it into a destination","Evaluate, Test, Launch","Extract, Table, Link"],a:1},
-  {s:"Analytics",q:"A stakeholder says 'our data shows 95% customer satisfaction.' As an analyst, what is the most important follow-up question?",o:["What chart type was used to show this?","How was customer satisfaction defined and measured?","Is the data stored in Excel or a database?","How many customers are in the dataset?"],a:1},
-  {s:"Analytics",q:"What does data granularity refer to?",o:["The number of charts in a report","How messy or clean a dataset is","The level of detail captured in each row of a dataset","The number of tables in a data model"],a:2},
-  {s:"Analytics",q:"Why is it important to understand your audience before building a dashboard?",o:["Different audiences use different tools","The right level of detail and the right metrics depend on what decisions that audience needs to make","Some audiences cannot read charts","Audience size determines how many visuals you need"],a:1},
-  {s:"Python",q:"In pandas, what does df.shape return?",o:["The column names of the DataFrame","The data types of each column","A tuple showing the number of rows and columns in the DataFrame","The first 5 rows of the DataFrame"],a:2},
-  {s:"Python",q:"A student runs df.isnull().sum() and sees 47 next to 'Revenue'. What does this mean?",o:["There are 47 rows where Revenue is zero","The Revenue column has 47 missing values","47 rows have been removed from the DataFrame","The Revenue column contains 47 unique values"],a:1},
-  {s:"Python",q:"What is the difference between df.drop_duplicates() and df.dropna()?",o:["drop_duplicates removes empty rows; dropna removes repeated rows","They both remove null values but from different axes","drop_duplicates removes repeated rows; dropna removes rows with missing values","They are the same function with different names"],a:2}
+  {s:"Analytics",q:"A manager asks \"why did customer churn increase last quarter?\" Which type of analysis is being requested?",o:["Descriptive","Diagnostic","Predictive","Prescriptive"],a:1},
+  {s:"Analytics",q:"What best defines a Key Performance Indicator (KPI)?",o:["Any column that exists in a raw dataset","A specific, measurable value that reflects how well an organisation is achieving an important business objective","A type of chart used exclusively for financial reports","A formula that only applies to sales data"],a:1},
+  {s:"Analytics",q:"What is the primary purpose of data cleaning before analysis?",o:["To ensure the data is accurate, consistent, and free of errors that could distort the results","To make the dataset file size as small as possible","To automatically generate charts from raw data","To remove every row that contains a text value"],a:0},
+  {s:"Analytics",q:"Which of the following is a categorical (qualitative) variable, not a quantitative one?",o:["Payment method (e.g. Cash, Card, Transfer)","Revenue per transaction","Number of units sold","Customer age in years"],a:0},
+  {s:"Analytics",q:"A company's salary data includes one extremely high outlier (the CEO's salary). Which measure of central tendency would be least affected by this outlier?",o:["The mean","The median","The range","The sum"],a:1},
+  {s:"Analytics",q:"What is an outlier in a dataset?",o:["Any value that is exactly zero","A value that appears more frequently than others","A missing or blank value","A data point that differs significantly from the rest of the dataset, which may indicate an error or a genuinely unusual case"],a:3},
+  {s:"Analytics",q:"A survey about a mobile banking app is only sent to customers who already use the app daily. What is the main problem with this approach?",o:["The survey will have too many responses to analyse","Daily users are more likely to answer honestly than others","The sample is biased — it excludes less frequent or dissatisfied users, so the results won't represent the full customer base","There is no problem, since it still produces usable data"],a:2},
+  {s:"Analytics",q:"What does ETL stand for in a data pipeline?",o:["Extract, Transform, Load — the process of pulling data from a source, cleaning/reshaping it, then loading it into a destination","Evaluate, Test, Launch — the process of validating a finished dashboard","Export, Transfer, Log — the process of backing up a database","Extract, Table, Link — the process of building relationships between tables"],a:0},
+  {s:"Analytics",q:"What does \"data granularity\" refer to?",o:["The total file size of a dataset","How visually appealing a chart is","The level of detail captured in each row of data — for example, daily sales versus monthly sales","The number of columns in a table"],a:2},
+  {s:"Analytics",q:"Before building a dashboard for a specific team, why is it important to understand their audience first?",o:["Different audiences require entirely different software licenses","It determines how many colours the dashboard is allowed to use","Audience size directly determines the number of visuals required","The right level of detail, metrics, and framing depend on what decisions that specific audience actually needs to make"],a:3},
+
+  {s:"Excel",q:"What is the key difference between VLOOKUP's exact match and approximate match modes?",o:["Exact match only works with numbers; approximate match works with text","Exact match requires FALSE (or 0) as the last argument and only returns matches identical to the lookup value; approximate match (TRUE/1) requires sorted data and returns the closest match","Approximate match is faster because it skips unmatched rows","There is no difference — both behave identically"],a:1},
+  {s:"Excel",q:"What is a practical benefit of using a Named Range in Excel?",o:["It automatically sorts the data within that range","It converts the range into a Pivot Table","It prevents anyone from editing the cells in that range","It makes formulas easier to read and maintain, e.g. =SUM(SalesData) instead of =SUM(B2:B500)"],a:3},
+  {s:"Excel",q:"After changing the source data behind a Pivot Table, what must you do to see the changes reflected?",o:["Nothing — Pivot Tables update automatically in real time","Delete and recreate the Pivot Table from scratch","Right-click the Pivot Table and select Refresh (or use Data → Refresh All)","Save the file and reopen it"],a:2},
+  {s:"Excel",q:"When using Data → Remove Duplicates on a table, what happens to rows that are fully identical to a previous row?",o:["They are highlighted in red but not removed","All but the first occurrence of each duplicate is permanently deleted","They are moved to a new sheet automatically","Excel asks you to manually approve each deletion one at a time"],a:1},
+  {s:"Excel",q:"You want to highlight all rows where the Amount column (D) exceeds 50000, using a formula-based conditional formatting rule applied to the whole row. Which formula is correct (active cell in row 2)?",o:["=$D2=50000","=D2>50000","=D$2>50000","=$D2>50000"],a:3},
+  {s:"Excel",q:"What is a key benefit of converting a range into an Excel Table (Ctrl+T)?",o:["Formulas referencing the table use structured references that automatically expand as new rows are added","It permanently locks the data from being edited","It converts all text in the table to uppercase","It removes the need for column headers"],a:0},
+  {s:"Excel",q:"What does View → Freeze Panes (with cell B2 selected) do?",o:["It locks every cell in the workbook from editing","It keeps row 1 and column A visible while scrolling through the rest of the sheet","It hides all rows and columns except the selected one","It freezes the formulas so they stop recalculating"],a:1},
+  {s:"Excel",q:"What is the main benefit of the IFS function over deeply nested IF statements?",o:["IFS lets you list multiple conditions and results in sequence without the parenthesis nesting required by stacked IFs, making the formula easier to read","IFS can only be used with numeric values, making it more reliable","IFS automatically sorts its conditions from smallest to largest","IFS removes the need for a FALSE argument entirely"],a:0},
+  {s:"Excel",q:"Which formula correctly counts how many entries in column A start with the word \"Inv\"?",o:["=COUNTIF(A:A, \"Inv\")","=COUNTIF(A:A, \"Inv*\")","=COUNTIF(A:A, \"*Inv\")","=COUNT(A:A, LEFT=\"Inv\")"],a:1},
+  {s:"Excel",q:"What is the primary purpose of adding a Slicer to a Pivot Table?",o:["It permanently deletes rows that don't match the selected filter","It gives users clickable buttons to interactively filter the Pivot Table without opening dropdown menus","It converts the Pivot Table into a standard table","It automatically refreshes the data source every 5 minutes"],a:1},
+  {s:"Excel",q:"Which symbol must every formula in Excel begin with?",o:["@","#","=","$"],a:2},
+  {s:"Excel",q:"Which function would you use to add up a range of numbers, e.g. B2:B10?",o:["=AVERAGE(B2:B10)","=SUM(B2:B10)","=COUNT(B2:B10)","=MAX(B2:B10)"],a:1},
+
+  {s:"SQL",q:"Why can't you use WHERE to filter on an aggregate function like COUNT(*)?",o:["WHERE only works with text columns","WHERE runs after GROUP BY so it would conflict with aggregation","WHERE filters individual rows before grouping happens, but aggregates like COUNT(*) don't exist until after grouping — HAVING is needed instead","WHERE cannot be combined with SELECT statements that use COUNT"],a:2},
+  {s:"SQL",q:"What does this query return?\nSELECT DISTINCT Department FROM Employees;",o:["Every row in the Employees table","The count of employees in each department","A list of each unique department name, with duplicates removed","An error, because DISTINCT requires a WHERE clause"],a:2},
+  {s:"SQL",q:"What does an INNER JOIN return?",o:["All rows from both tables, regardless of whether they match","Only the rows that have matching values in both joined tables","Only the rows from the left table, with NULLs where there's no match","A random sample of matching rows from either table"],a:1},
+  {s:"SQL",q:"What does this query return?\nSELECT c.Name, o.OrderID FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID;",o:["Every customer, with OrderID shown as NULL for any customer who has never placed an order","Only customers who have placed at least one order","Only orders that have a matching customer","An error, because LEFT JOIN requires a WHERE clause"],a:0},
+  {s:"SQL",q:"What does this query return?\nSELECT Name, Salary FROM Employees WHERE Salary > (SELECT AVG(Salary) FROM Employees);",o:["The employee with the single highest salary","The average salary across all employees","An error, because a SELECT cannot be nested inside a WHERE clause","Every employee whose salary is above the company-wide average salary"],a:3},
+  {s:"SQL",q:"What does the UNION keyword do when combining two SELECT statements?",o:["It stacks the results of both queries into one result set, automatically removing exact duplicate rows","It joins two tables side by side based on a matching column","It filters one query's results using the other as a condition","It runs both queries and returns only the rows that appear in both"],a:0},
+  {s:"SQL",q:"What is the difference between UNION and UNION ALL?",o:["UNION ALL can only combine numeric columns; UNION works with any data type","UNION removes duplicate rows from the combined result; UNION ALL keeps every row, including duplicates","UNION is faster because it processes fewer rows","UNION ALL requires both SELECT statements to come from the same table"],a:1},
+  {s:"SQL",q:"What is the key difference between INNER JOIN and LEFT JOIN?",o:["INNER JOIN can only be used with two tables; LEFT JOIN can join more than two","LEFT JOIN is always faster than INNER JOIN","INNER JOIN requires an ORDER BY clause; LEFT JOIN does not","INNER JOIN returns only matching rows from both tables; LEFT JOIN returns all rows from the left table even without a match"],a:3},
+  {s:"SQL",q:"What does this query return?\nSELECT City, COUNT(*) AS CustomerCount FROM Customers GROUP BY City ORDER BY CustomerCount DESC;",o:["Each city listed once with its customer count, sorted from the most customers to the fewest","A single total count of all customers","An error, because you cannot ORDER BY an aliased column","Every customer's city, sorted alphabetically"],a:0},
+  {s:"SQL",q:"What does this query return?\nSELECT Department, City, COUNT(*) AS Total FROM Employees GROUP BY Department, City;",o:["A single count of all employees, ignoring department and city","An error, because GROUP BY can only reference one column at a time","A count of employees for each unique combination of Department and City","Every employee's department and city, with no aggregation"],a:2},
+  {s:"SQL",q:"What is the purpose of writing \"FROM Employees e\" in a query?",o:["It filters the Employees table to only rows starting with \"e\"","It renames the Employees table permanently in the database","It creates a new temporary column called \"e\"","It gives the Employees table a shorthand alias (\"e\") usable elsewhere in the query instead of the full table name"],a:3},
+  {s:"SQL",q:"Which query finds all product codes that are exactly 4 characters long and start with \"A\"?",o:["SELECT * FROM Products WHERE Code LIKE 'A___'","SELECT * FROM Products WHERE Code LIKE 'A%'","SELECT * FROM Products WHERE LEN(Code) LIKE 'A'","SELECT * FROM Products WHERE Code LIKE '____A'"],a:0},
+  {s:"SQL",q:"What does this query return?\nSELECT Name FROM Products WHERE Category NOT IN ('Electronics', 'Furniture');",o:["Only products in the Electronics or Furniture category","An error, because NOT IN requires exactly one value","All products, regardless of category","Every product whose category is neither Electronics nor Furniture"],a:3},
+  {s:"SQL",q:"What does this query return?\nSELECT MIN(Price) AS Lowest, MAX(Price) AS Highest, AVG(Price) AS Average FROM Products;",o:["Three separate result sets, one per function","A single row showing the lowest price, highest price, and average price across all products","An error, because you cannot use three aggregate functions in one SELECT","The lowest, highest, and average price for each individual product"],a:1},
+  {s:"SQL",q:"What does this query do?\nSELECT Name, Department, Salary FROM Employees ORDER BY Department ASC, Salary DESC;",o:["It sorts by Salary first, then Department","It groups employees by department before sorting","It sorts employees alphabetically by Department, and within each department, from highest to lowest Salary","It returns an error because ORDER BY cannot use two columns"],a:2},
+  {s:"SQL",q:"What does COUNT(DISTINCT City) return, compared to COUNT(City)?",o:["They always return the same result","COUNT(DISTINCT City) counts NULL values while COUNT(City) does not","COUNT(City) only works on numeric columns","COUNT(DISTINCT City) counts each unique city name once, while COUNT(City) counts every non-null row regardless of repeats"],a:3},
+  {s:"SQL",q:"Which query is functionally equivalent to WHERE City = 'Lagos' OR City = 'Abuja' OR City = 'Kano'?",o:["WHERE City BETWEEN 'Lagos' AND 'Kano'","WHERE City LIKE 'Lagos, Abuja, Kano'","WHERE City IN ('Lagos', 'Abuja', 'Kano')","WHERE City = 'Lagos' AND City = 'Abuja' AND City = 'Kano'"],a:2},
+  {s:"SQL",q:"Which query correctly returns the 5 most expensive products that are currently In Stock?",o:["SELECT TOP 5 * FROM Products WHERE InStock = 'Yes' ORDER BY Price DESC","SELECT * FROM Products WHERE InStock = 'Yes' TOP 5 ORDER BY Price DESC","SELECT TOP 5 * FROM Products ORDER BY Price DESC WHERE InStock = 'Yes'","SELECT * FROM Products ORDER BY Price DESC WHERE InStock = 'Yes' TOP 5"],a:0},
+  {s:"SQL",q:"Which query finds all product names that contain the word \"Pro\" anywhere within them (e.g. \"ProMax\", \"HydroPro\", \"ProSeries\")?",o:["SELECT * FROM Products WHERE Name LIKE '%Pro%'","SELECT * FROM Products WHERE Name LIKE 'Pro%'","SELECT * FROM Products WHERE Name = '%Pro%'","SELECT * FROM Products WHERE Name LIKE '%Pro'"],a:0},
+  {s:"SQL",q:"What does this query return?\nSELECT DISTINCT Department, City FROM Employees;",o:["Only the unique department names, ignoring city","Every row in the Employees table with no filtering","An error, because DISTINCT can only be applied to a single column","Each unique combination of Department and City, with exact duplicate pairs removed"],a:3},
+
+  {s:"Power BI",q:"What is the primary role of Power Query in Power BI?",o:["To write DAX measures for the data model","To design the visuals on the report canvas","To connect to data sources and clean/transform data before it loads into the model","To publish the finished report to Power BI Service"],a:2},
+  {s:"Power BI",q:"In a star schema, what does the fact table typically contain?",o:["Transaction-level records and numeric measures, linked to dimension tables via foreign keys","Descriptive attributes like product names and customer details","A single row summarising the entire dataset","Only date and time values"],a:0},
+  {s:"Power BI",q:"What is the key difference between a Measure and a Calculated Column?",o:["A Measure is calculated dynamically based on the current filter context; a Calculated Column is computed once per row when the data loads","A Measure can only return text; a Calculated Column can only return numbers","Calculated Columns update automatically with slicers; Measures do not","There is no functional difference between them"],a:0},
+  {s:"Power BI",q:"What does the CALCULATE function do in DAX?",o:["It performs simple arithmetic like addition and subtraction","It only works with text columns","It evaluates an expression in a modified filter context, letting you override or add filters to a calculation","It automatically creates a new table in the data model"],a:2},
+  {s:"Power BI",q:"Why is DIVIDE() generally preferred over the standard division operator (/) in DAX?",o:["DIVIDE() is significantly faster to calculate on large datasets","DIVIDE() lets you specify a fallback result (like 0 or BLANK) when the denominator is zero or blank, avoiding errors","The / operator cannot be used inside a measure at all","DIVIDE() automatically formats the result as a percentage"],a:1},
+  {s:"Power BI",q:"What does a one-to-many relationship mean between a dimension table and a fact table?",o:["The fact table can only contain one row","Both tables must have exactly the same number of rows","The dimension table must be hidden from the report view","One row in the dimension table can relate to many rows in the fact table (e.g. one city relates to many orders)"],a:3},
+  {s:"Power BI",q:"What does \"filter context\" mean in DAX?",o:["The order in which DAX functions are written in a formula","The colour theme applied to visuals on the report page","The physical location of the data source","The combination of filters — from slicers, visuals, and page-level filters — active when a measure is evaluated"],a:3},
+  {s:"Power BI",q:"What happens when you click Publish in Power BI Desktop?",o:["The report is uploaded to a workspace in Power BI Service, making it accessible via a web browser","The report is permanently converted into a PDF file","The underlying dataset is deleted from Desktop","The report is emailed automatically to your entire organisation"],a:0},
+  {s:"Power BI",q:"What does DISTINCTCOUNT(Sales[CustomerID]) calculate?",o:["The number of unique customer IDs, counting each one only once even if it appears in multiple rows","The total sales amount per customer","The total number of rows in the Sales table","The average number of purchases per customer"],a:0},
+  {s:"Power BI",q:"What is the risk of dragging a numeric column directly into a visual instead of using an explicit measure?",o:["Power BI will refuse to display the visual at all","It creates an implicit measure that defaults to SUM, which may not be the aggregation intended and is harder to reuse consistently","It permanently changes the column's data type","It disables that column from ever being used in a measure again"],a:1},
+  {s:"Power BI",q:"What is a common risk of a many-to-many relationship between two tables in a data model?",o:["It can lead to ambiguous or unexpectedly duplicated results in calculations, and should generally be avoided in favour of a proper design","It automatically causes the report to fail to publish","It disables the use of DAX measures entirely on both tables","It has no practical downside compared to a one-to-many relationship"],a:0},
+  {s:"Power BI",q:"You drag a Revenue column into a card visual and it shows a sum by default. How could you change it to show the average instead, without writing a new measure?",o:["You can't — a new explicit measure is always required","Delete and reload the entire dataset","Change the column's data type from number to text","Click the dropdown on the field in the Values well and select Average instead of Sum"],a:3},
+  {s:"Power BI",q:"What is the difference between a filter applied at the Page level versus the Visual level?",o:["There is no difference — both affect the entire report equally","Visual-level filters affect every page; Page-level filters affect only one visual","Page-level filters can only be applied to slicers","A Page-level filter affects every visual on that page, while a Visual-level filter affects only the single visual it's applied to"],a:3},
+  {s:"Power BI",q:"What is the purpose of the Applied Steps pane in Power Query?",o:["It shows a live preview of the final report visuals","It records every transformation applied to the data in order, letting you review, rename, reorder or remove any step","It lists all the DAX measures created in the model","It displays the refresh history of the published dataset"],a:1},
+  {s:"Power BI",q:"In Power BI Service, what is the key difference between a Report and a Dashboard?",o:["They are simply two different names for the exact same thing","A Dashboard is built in Desktop; a Report can only be built directly in Service","Reports cannot be shared with other users, but Dashboards can","A Report is a multi-page, interactive document; a Dashboard is a single page of pinned tiles, often pulled across one or more reports"],a:3},
+
+  {s:"Analytics",q:"A dataset has a column where 95% of the values are missing. What is generally the most sensible first step?",o:["Automatically fill every missing value with zero","Ignore the missing values completely and proceed with analysis unchanged","Investigate why so much data is missing before deciding whether to drop the column, fill it, or flag it as unreliable","Delete every row in the entire dataset"],a:2},
+  {s:"Analytics",q:"Why is a bar chart generally a better choice than a pie chart when comparing more than 6 or 7 categories?",o:["Bar charts make it easier to accurately compare the length of each category side by side, while pie charts become cluttered with many thin slices","Pie charts cannot technically display more than 5 categories in any software","Bar charts always take up less space on a dashboard","There is no meaningful difference between the two chart types"],a:0},
+  {s:"Analytics",q:"When presenting findings to a non-technical stakeholder, what should generally come first?",o:["The key finding and what it means for the business, stated clearly upfront — before the supporting details and methodology","A full explanation of every formula and calculation used","The complete raw dataset, so they can verify the numbers themselves","A list of every tool and software used during the analysis"],a:0}
 ];
 
 // ── Check if already attempted ──────────────────────────────────────────
@@ -305,12 +308,10 @@ function render() {
 function selectOpt(i) {
   if (confirmed) return;
   selectedOpt = i;
-  // Highlight selected, clear others
   document.querySelectorAll(".opt").forEach((o, idx) => {
     o.classList.remove("selected");
     if (idx === i) o.classList.add("selected");
   });
-  // Enable next / submit
   document.getElementById("next-btn").disabled = false;
 }
 
@@ -319,20 +320,16 @@ function nextQ() {
   confirmed = true;
   const q = Q[cur];
   const opts = document.querySelectorAll(".opt");
-  // Lock all options
   opts.forEach(o => o.classList.add("locked"));
-  // Show correct / wrong
   opts[selectedOpt].classList.remove("selected");
   opts[selectedOpt].classList.add(selectedOpt === q.a ? "correct" : "wrong");
   if (selectedOpt === q.a) score++;
   else opts[q.a].classList.add("show-correct");
-  // Feedback
   const fb = document.getElementById("feedback");
   fb.className = "feedback show " + (selectedOpt === q.a ? "correct-fb" : "wrong-fb");
   fb.textContent = selectedOpt === q.a
     ? "Correct!"
     : "Incorrect. The correct answer is " + ["A","B","C","D"][q.a] + ".";
-  // Change button
   const nb = document.getElementById("next-btn");
   nb.textContent = cur === 59 ? "See Results" : "Next Question";
   nb.onclick = () => {
@@ -372,7 +369,6 @@ function finish() {
   else                { grade = "Did not pass";msg = "The concepts are there — review the modules and apply them hands-on. You can get there."; }
   document.getElementById("result-grade").textContent = grade + " · " + pct + "%";
   document.getElementById("grade-msg").textContent = msg;
-  // Save result to localStorage so retakes are blocked
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     name: studentName, score, pct, grade,
     submittedAt: new Date().toISOString()
